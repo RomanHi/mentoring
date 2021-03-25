@@ -17,6 +17,20 @@ import java.util.regex.Pattern;
  */
 
 public class Messenger {
+    private final TemplateHolder templateHolder ;
+    private final TemplateProcessor templateProcessor;
+    private Input input;
+    private Output output;
+
+    public Messenger(Input input,
+                     Output output,
+                     TemplateHolder templateHolder,
+                     TemplateProcessor templateProcessor) {
+        this.input = input;
+        this.output = output;
+        this.templateHolder = templateHolder;
+        this.templateProcessor = templateProcessor;
+    }
 
     public static final String TEMPLATE_FILE = "template.txt";
     public static final String TEMPLATE_PATTERN = "\\#\\{.+?\\}";
@@ -30,6 +44,13 @@ public class Messenger {
                 (new FileReader(CLASS_LOADER.getResource(inputFileName).getFile())));
         String message = readTemplate(messengerInput.inputFromFile());
         new MessengerOutput().outputToFile(message, new FileWriter(CLASS_LOADER.getResource(outputFileName).getFile()));
+    }
+
+    public void processing() throws IOException, URISyntaxException {
+        String tmp = templateHolder.getTemplate();
+        Map<String, String> inputData = input.getInputParams();
+        String result = templateProcessor.processTemplate(inputData, tmp);
+        output.output(result);
     }
 
     public void processConsoleOperation() throws IOException, URISyntaxException {

@@ -14,8 +14,13 @@ public class Launcher {
     public static final int MIN_ARGUMENTS_NUMBER = 2;
 
     public static void main(String[] args) throws IOException, URISyntaxException {
-        Messenger messenger = new Messenger();
-        chooseOperationType(args, messenger);
+        Messenger messenger;
+        if (args.length < MIN_ARGUMENTS_NUMBER) {
+            messenger = new Messenger(null, null, null, null);
+        }  else {
+            messenger = new Messenger(null, null, null, null);
+        }
+        messenger.processing();
     }
 
 /* In case of file mode names of input and output files should be provided as program arguments.
